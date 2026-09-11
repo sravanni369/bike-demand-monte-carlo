@@ -1,0 +1,106 @@
+{
+  "python": "3.13.5",
+  "numpy": "2.2.6",
+  "pandas": "2.3.1",
+  "plans": {
+    "mean90": {
+      "penalty": 3275.407,
+      "coverage": 0.3798,
+      "reduction_pct": 0.0
+    },
+    "mc90": {
+      "penalty": 1947.019,
+      "coverage": 0.6421,
+      "reduction_pct": 40.56
+    },
+    "exact90": {
+      "penalty": 1936.623,
+      "coverage": 0.6448,
+      "reduction_pct": 40.87
+    },
+    "q80_90": {
+      "penalty": 1945.538,
+      "coverage": 0.6503,
+      "reduction_pct": 40.6
+    },
+    "mean_std90": {
+      "penalty": 1840.407,
+      "coverage": 0.7295,
+      "reduction_pct": 43.81
+    },
+    "q80_7": {
+      "penalty": 1332.836,
+      "coverage": 0.7104,
+      "reduction_pct": 59.31
+    },
+    "q80_14": {
+      "penalty": 1385.281,
+      "coverage": 0.735,
+      "reduction_pct": 57.71
+    },
+    "q80_30": {
+      "penalty": 1417.996,
+      "coverage": 0.7541,
+      "reduction_pct": 56.71
+    },
+    "q80_60": {
+      "penalty": 1675.137,
+      "coverage": 0.6885,
+      "reduction_pct": 48.86
+    },
+    "max7": {
+      "penalty": 1343.172,
+      "coverage": 0.8579,
+      "reduction_pct": 58.99
+    },
+    "oracle": {
+      "penalty": 0.0,
+      "coverage": 1.0,
+      "reduction_pct": 100.0
+    }
+  },
+  "by_quarter": {
+    "1": {
+      "days": 91.0,
+      "demand": 4008.31,
+      "mean_plan": 4067.52,
+      "mc_plan": 2400.15,
+      "covered": 0.47,
+      "reduction_pct": 40.99
+    },
+    "2": {
+      "days": 91.0,
+      "demand": 6295.81,
+      "mean_plan": 4746.33,
+      "mc_plan": 1763.86,
+      "covered": 0.47,
+      "reduction_pct": 62.84
+    },
+    "3": {
+      "days": 92.0,
+      "demand": 6920.47,
+      "mean_plan": 2404.59,
+      "mc_plan": 1079.75,
+      "covered": 0.66,
+      "reduction_pct": 55.1
+    },
+    "4": {
+      "days": 92.0,
+      "demand": 5165.41,
+      "mean_plan": 1907.79,
+      "mc_plan": 2547.25,
+      "covered": 0.96,
+      "reduction_pct": -33.52
+    }
+  },
+  "reduction_block_bootstrap_95": [
+    29.8,
+    49.5
+  ],
+  "coverage": {
+    "target": 0.8,
+    "in_window": 0.8094,
+    "test": 0.6421,
+    "demand_above_mean90": 0.623
+  }
+}

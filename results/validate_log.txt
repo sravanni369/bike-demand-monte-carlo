@@ -1,0 +1,74 @@
+{
+  "status": "PASS",
+  "checks": [
+    "731 unique consecutive dates",
+    "target count integrity",
+    "exactly 50 physical core lines",
+    "asymmetric loss arithmetic",
+    "identical repeated runs",
+    "chronological 366-day test",
+    "future perturbation invariance (2 cutoffs)",
+    "independent exhaustive reference",
+    "constant-demand edge case",
+    "invalid input rejection",
+    "three additional random seeds"
+  ],
+  "python": "3.13.5",
+  "numpy": "2.2.6",
+  "pandas": "2.3.1",
+  "data_sha256": "a6bcf826782d3c0fbfdcbeead17cd0884185a0dafe8ff10cd48a874ee7ba18be",
+  "additional_seeds": [
+    {
+      "seed": 7,
+      "draws": 5000,
+      "test_days": 366,
+      "baseline_loss": 3275.407,
+      "baseline_coverage": 0.3798,
+      "mc_loss": 1953.672,
+      "mc_coverage": 0.6421,
+      "exact_loss": 1936.623,
+      "exact_coverage": 0.6448,
+      "mc_regret": 0.1837,
+      "loss_reduction_pct": 40.35
+    },
+    {
+      "seed": 21,
+      "draws": 5000,
+      "test_days": 366,
+      "baseline_loss": 3275.407,
+      "baseline_coverage": 0.3798,
+      "mc_loss": 1934.574,
+      "mc_coverage": 0.6448,
+      "exact_loss": 1936.623,
+      "exact_coverage": 0.6448,
+      "mc_regret": 0.2045,
+      "loss_reduction_pct": 40.94
+    },
+    {
+      "seed": 84,
+      "draws": 5000,
+      "test_days": 366,
+      "baseline_loss": 3275.407,
+      "baseline_coverage": 0.3798,
+      "mc_loss": 1942.21,
+      "mc_coverage": 0.6393,
+      "exact_loss": 1936.623,
+      "exact_coverage": 0.6448,
+      "mc_regret": 0.3268,
+      "loss_reduction_pct": 40.7
+    }
+  ],
+  "metrics": {
+    "seed": 42,
+    "draws": 5000,
+    "test_days": 366,
+    "baseline_loss": 3275.407,
+    "baseline_coverage": 0.3798,
+    "mc_loss": 1947.019,
+    "mc_coverage": 0.6421,
+    "exact_loss": 1936.623,
+    "exact_coverage": 0.6448,
+    "mc_regret": 0.17,
+    "loss_reduction_pct": 40.56
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "draws": 5000,
+  "test_days": 366,
+  "baseline_loss": 3275.407,
+  "baseline_coverage": 0.3798,
+  "mc_loss": 1947.019,
+  "mc_coverage": 0.6421,
+  "exact_loss": 1936.623,
+  "exact_coverage": 0.6448,
+  "mc_regret": 0.17,
+  "loss_reduction_pct": 40.56
+}

@@ -1,0 +1,8 @@
+{
+  "source": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip",
+  "doi": "https://doi.org/10.24432/C5W894",
+  "license": "CC BY 4.0",
+  "creator": "Hadi Fanaee-T",
+  "downloaded": "2026-09-11",
+  "sha256": "a6bcf826782d3c0fbfdcbeead17cd0884185a0dafe8ff10cd48a874ee7ba18be"
+}

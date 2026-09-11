@@ -1,0 +1,30 @@
+[1] same 90-day window, different decision rule (test days: 2012, n=366)
+  previous-90-day mean, on grid (README baseline)      penalty  3275.407   covered  38.0%   vs mean    0.0%
+  Monte Carlo, 5,000 draws, seed 42 (README)           penalty  1947.019   covered  64.2%   vs mean   40.6%
+  exact expectation over the 90 days (README)          penalty  1936.623   covered  64.5%   vs mean   40.9%
+  0.8 quantile of the 90 days: np.quantile(h, 0.8)     penalty  1945.538   covered  65.0%   vs mean   40.6%
+  mean + 1 std of the 90 days, on grid                 penalty  1840.407   covered  73.0%   vs mean   43.8%
+
+[2] same 0.8-quantile rule, shorter windows (post-hoc sensitivity, not tuned)
+  0.8 quantile of the previous 7 days                  penalty  1332.836   covered  71.0%   vs mean   59.3%
+  0.8 quantile of the previous 14 days                 penalty  1385.281   covered  73.5%   vs mean   57.7%
+  0.8 quantile of the previous 30 days                 penalty  1417.996   covered  75.4%   vs mean   56.7%
+  0.8 quantile of the previous 60 days                 penalty  1675.137   covered  68.9%   vs mean   48.9%
+  max of the previous 7 days                           penalty  1343.172   covered  85.8%   vs mean   59.0%
+  perfect foresight (lower bound, for scale)           penalty     0.000   covered 100.0%   vs mean  100.0%
+
+[3] the 40.56% by quarter (Monte Carlo vs previous-90-day mean)
+      days   demand  mean_plan  mc_plan  covered  reduction_pct
+date                                                           
+1       91  4008.31    4067.52  2400.15     0.47          40.99
+2       91  6295.81    4746.33  1763.86     0.47          62.84
+3       92  6920.47    2404.59  1079.75     0.66          55.10
+4       92  5165.41    1907.79  2547.25     0.96         -33.52
+  days MC plan beats mean plan: 208 / 366
+  weekly block bootstrap, 5,000 resamples, 95% interval on the reduction: 29.8% to 49.5%
+
+[4] what the coverage should be compared with
+  target implied by the 4:1 loss             : 80.0% of days
+  MC plan, coverage inside its own window     : 80.9%
+  MC plan, coverage on the 2012 test days     : 64.21%
+  2012 days with demand above the 90-day mean : 62.3%  (the series is rising)
