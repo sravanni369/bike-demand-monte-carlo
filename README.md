@@ -14,6 +14,12 @@ over the 366 days of 2012. Three things the audit added before publishing:
 
 This is a retrospective experiment on public data, not a deployed system or a measured saving.
 
+**Part 2 (2026-09-28)** adds a regression forecast and tests whether its errors are bell-shaped.
+They are not, but a bell-curve safety allowance planned as well as an empirical one. See
+[Part 2](#part-2-are-the-forecast-errors-bell-shaped-and-does-it-matter-2026-09-28).
+
+Author: Lakshmi Sravani Putta.
+
 ## Business question
 
 A bike-rental operator plans daily processing capacity. Under-planning (turned-away rentals,
@@ -107,6 +113,96 @@ was rising, which is also why the mean plan lags so badly in Q1 to Q3.
 These were run after the 90-day result was known, so they are reported as a sensitivity, not
 promoted to the headline.
 
+## Part 2: are the forecast errors bell-shaped, and does it matter? (2026-09-28)
+
+**Question.** A regression forecasts tomorrow's rentals and a safety allowance is added on top.
+If the allowance assumes the errors follow a normal curve, does that under-plan busy days?
+
+**Answer on 2012: no.** The errors are clearly not normal, but the normal-theory allowance and
+the empirical one are statistically indistinguishable, and the normal one covered more busy
+days. The errors are skewed to the downside (sudden demand crashes on storm days), which widens
+the standard deviation, so the bell-curve allowance over-plans rather than under-plans.
+
+2012 was already examined in Part 1, so everything below is **retrospective**, not a fresh test.
+
+### Method
+
+- **Forecast:** ordinary least squares refitted every day on all earlier days (expanding window),
+  one step ahead. Features known the evening before: yesterday's rentals, rentals seven days
+  earlier, holiday, weekday, and day of year (sine and cosine). Same-day weather is left out
+  because it is not known the night before.
+- **Allowance:** from the previous 90 one-step errors, either the normal 80th percentile
+  (mean + 0.8416 × sd) or the empirical 80th percentile. 0.8 is the critical fractile of the
+  same assumed 4:1 shortage-to-idle penalty as Part 1.
+- **Baselines:** no allowance; yesterday's count plus either allowance; the raw 90-day and 7-day
+  80th-percentile plans from Part 1.
+- **Leakage check:** every count from mid-2012 onward is raised by 10,000; no forecast or plan
+  before that date changes (maximum change 0.000000).
+
+### Error shape
+
+| One-step regression errors | n | Skew | Kurtosis | Jarque–Bera p | Ljung–Box(7) p |
+|---|---:|---:|---:|---:|---:|
+| 2011, from day 29 | 337 | -0.64 | 4.11 | 1.6e-09 | 0.0083 |
+| 2011, from day 90 | 275 | -0.68 | 3.97 | 1.1e-07 | 0.063 |
+| 2011, three largest removed | 334 | -0.41 | 2.89 | 0.008 | 2.4e-07 |
+| 2012 | 366 | -1.11 | 6.98 | 2.5e-69 | 0.00047 |
+| 2012, Hurricane Sandy and next day removed | 364 | -0.91 | 6.27 | 5.4e-47 | 6.7e-05 |
+
+The left skew holds under every cut. The heavy tail in 2011 comes from a handful of storm days
+(kurtosis 2.89 once the three worst are removed). Evidence of autocorrelation in 2011 depends
+on where the series starts (p = 0.0083 from day 29, 0.063 from day 90).
+Plots: `results/error_diagnostics.png`.
+
+### Capacity plans, 2012
+
+| Plan | Mean penalty / day | Coverage | Busy-day coverage* |
+|---|---:|---:|---:|
+| Regression, no allowance | 2,695.555 | 27.0% | 1.4% |
+| Regression + normal allowance | 1,357.785 | 83.3% | 73.0% |
+| Regression + empirical allowance | 1,336.516 | 77.0% | 60.8% |
+| Yesterday's count + normal allowance | 1,671.072 | 84.4% | 78.4% |
+| Yesterday's count + empirical allowance | 1,627.255 | 78.1% | 71.6% |
+| Raw 90-day 80th percentile (Part 1) | 1,945.538 | 65.0% | 25.7% |
+| Raw 7-day 80th percentile (Part 1 sensitivity) | 1,332.836 | 71.0% | 36.5% |
+
+\*Busy day = 2012 demand at or above the 2012 80th percentile. That threshold uses hindsight
+and is for reporting only. With a threshold known in advance (the trailing 90-day 80th
+percentile), normal vs empirical is 68.0% vs 57.0%, the same direction.
+
+Paired differences in mean penalty per day, with 95% intervals from a weekly block bootstrap:
+
+| Comparison | Gap | 95% CI |
+|---|---:|---:|
+| Normal minus empirical allowance | 21.3 | [-16.7, 55.4] |
+| Yesterday + empirical minus regression + empirical | 290.7 | [171.8, 421.4] |
+| Raw 90-day minus regression + empirical | 609.0 | [247.4, 932.3] |
+| Raw 7-day minus regression + empirical | -3.7 | [-143.2, 122.9] |
+
+What this shows:
+
+- **Normal vs empirical allowance:** no difference is demonstrated. Part of the small gap is one
+  storm: with Hurricane Sandy's error kept out of the windows the gap falls from 21.3 to 15.6.
+  The normal allowance over-covers (83.3% against an 80% target) and the empirical one
+  under-covers (77.0%).
+- **Regression vs yesterday's count:** with the same empirical allowance the regression plan is
+  17.9% cheaper, and the interval excludes zero. Its point forecast is not more accurate (MAE
+  879.2 vs 870.2, difference +9.0, CI [-43.3, 65.6]), so the gain comes from a steadier error
+  distribution for the allowance, not from better point forecasts.
+- **Regression vs the Part 1 plans:** it beats the 90-day quantile, but most of that gain is the
+  90-day window lagging the 2012 growth. It ties the 7-day quantile, which wins Q2 and Q3. Both
+  the regression and the 7-day window were chosen after 2012 had been seen.
+
+### Book exercise (fictitious data)
+
+`book_exercise/hellwig_jarque_bera_book.py` reproduces the Hellwig and Jarque–Bera tests of
+Welc, J., & Rodriguez Esquerdo, P. J. (2018). *Applied Regression Analysis for Business:
+Tools, Traps and Applications*. Springer, sections 4.3.5–4.3.6, on the book's 20 fictitious
+restaurant-cost residuals (Table 4.2). Results match the book: 7 empty Hellwig cells (bounds
+4 to 9) and JB = 0.3837 against a critical value of 5.99. The book's worked example uses the
+n − 1 standard deviation even though its Table 4.3 writes 1/n; with 1/n the count is 8. Hellwig
+is designed for fewer than 30 residuals, so it is not applied to the 366-day bike errors.
+
 ## Run and verify
 
 Verified on Windows 11, Python 3.13.5, NumPy 2.2.6, pandas 2.3.1 (the VS Code screenshot).
@@ -117,7 +213,11 @@ python -m pip install -r requirements.txt
 python monte_carlo.py      # the 50-line core; prints metrics, writes results/backtest.csv
 python validate.py         # 11 checks; writes results/validation.json
 python baselines.py        # audit-driven baselines, quarters, bootstrap; writes results/baselines.json
+python error_allowance.py  # Part 2: regression errors and allowances; writes results/error_allowance_*
+python book_exercise/hellwig_jarque_bera_book.py   # book example, fictitious data
 ```
+
+Part 2 was run on Python 3.13.5, NumPy 2.2.6, pandas 2.3.1, SciPy 1.16.3, Matplotlib 3.10.3.
 
 `monte_carlo.py` is exactly **50 physical lines** including imports, blank lines and I/O;
 `validate.py` asserts that count. The checks: 731 unique consecutive dates, `cnt` equals
@@ -127,6 +227,10 @@ decisions re-enumerated in plain Python, a constant-demand edge case, invalid in
 three extra seeds. Logs of every run are in `results/`.
 
 ![Run in VS Code](screenshots/vscode_run.png)
+
+![Part 2 run in VS Code](screenshots/vscode_error_allowance.png)
+
+![Error diagnostics](results/error_diagnostics.png)
 
 ## Practical limits and next step
 
@@ -139,6 +243,7 @@ operations, and evaluate on a fresh period. Nothing here establishes a real-worl
 
 ## Files
 
-`monte_carlo.py` (50-line core), `validate.py`, `baselines.py`, `data/day.csv`,
+`monte_carlo.py` (50-line core), `validate.py`, `baselines.py`, `error_allowance.py` (Part 2),
+`book_exercise/` (book example on fictitious data), `data/day.csv`,
 `data/provenance.json`, `results/` (backtest, metrics, validation, baselines, run logs),
-`screenshots/vscode_run.png`. Book pages and extracted book text are not redistributed.
+`screenshots/vscode_run.png`, `screenshots/vscode_error_allowance.png`. Book pages and extracted book text are not redistributed.

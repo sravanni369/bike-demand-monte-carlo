@@ -1,0 +1,40 @@
+Test: 366 days of 2012 (retrospective), one-step ahead. Loss 4:1, fractile 0.8, z = 0.8416, allowance window 90 errors.
+Point forecast MAE: regression 879.2 vs yesterday's count 870.2; difference +9.0, block-7 95% CI [-43.3, 65.6]
+
+Error shape (one-step regression errors)
+  2011 from day 29             n=337 skew=-0.64 kurt=4.11 JB p=1.6e-09 Shapiro p=2e-05 lag1 r=+0.10 Ljung-Box(7) p=0.0083
+  2011 from day 90             n=275 skew=-0.68 kurt=3.97 JB p=1.1e-07 Shapiro p=3.8e-05 lag1 r=+0.09 Ljung-Box(7) p=0.063
+  2011 minus 3 largest         n=334 skew=-0.41 kurt=2.89 JB p=0.008 Shapiro p=0.00078 lag1 r=+0.18 Ljung-Box(7) p=2.4e-07
+  2012                         n=366 skew=-1.11 kurt=6.98 JB p=2.5e-69 Shapiro p=2.8e-12 lag1 r=-0.09 Ljung-Box(7) p=0.00047
+  2012 minus Sandy + next day  n=364 skew=-0.91 kurt=6.27 JB p=5.4e-47 Shapiro p=1.1e-10 lag1 r=-0.16 Ljung-Box(7) p=6.7e-05
+
+Capacity plans, 2012
+                     mean_penalty  coverage  mean_short  mean_idle  busy_cov_2012_q80  busy_cov_trailing_q80
+plan                                                                                                        
+no allowance             2695.555     0.270     605.444    273.781              0.014                  0.039
+normal allowance         1357.785     0.833      89.117   1001.317              0.730                  0.680
+empirical allowance      1336.516     0.770     120.444    854.739              0.608                  0.570
+naive + normal           1671.072     0.844     131.222   1146.184              0.784                  0.766
+naive + empirical        1627.255     0.781     185.224    886.359              0.716                  0.695
+raw 90-day quantile      1945.538     0.650     228.498   1031.547              0.257                  0.000
+raw 7-day quantile       1332.836     0.710     135.895    789.255              0.365                  0.375
+
+Mean penalty by quarter
+quarter                  Q1      Q2      Q3      Q4
+plan                                               
+empirical allowance  1299.2  1393.2  1158.1  1495.7
+naive + empirical    1429.6  1873.6  1378.1  1828.2
+naive + normal       1414.3  1903.8  1501.2  1864.8
+no allowance         3096.4  2746.6  2407.2  2536.9
+normal allowance     1277.1  1471.9  1190.0  1492.5
+raw 7-day quantile   1422.9  1280.2  1117.2  1511.4
+raw 90-day quantile  2375.3  1821.9  1073.2  2515.1
+
+Paired gaps in mean penalty per day (positive = second plan cheaper)
+  normal allowance minus empirical allowance           21.3  block-7 95% CI [-16.7, 55.4]
+  naive + empirical minus empirical allowance         290.7  block-7 95% CI [171.8, 421.4]
+  raw 90-day quantile minus empirical allowance       609.0  block-7 95% CI [247.4, 932.3]
+  raw 7-day quantile minus empirical allowance         -3.7  block-7 95% CI [-143.2, 122.9]
+  normal minus empirical with Sandy's error kept out of the windows: 15.6
+
+Leakage check: max change in any forecast or plan before the cutoff = 0.000000

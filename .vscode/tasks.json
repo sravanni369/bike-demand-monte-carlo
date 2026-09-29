@@ -2,11 +2,17 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "run monte_carlo",
+      "label": "run error_allowance",
       "type": "shell",
-      "command": "python monte_carlo.py",
-      "presentation": { "reveal": "always", "panel": "dedicated", "focus": true },
-      "runOptions": { "runOn": "folderOpen" }
+      "command": "python error_allowance.py",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
     }
   ]
 }
